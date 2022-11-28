@@ -73,11 +73,16 @@ convoClient.registerSequence(new Sequence({
             return;
         }
 
+        if (dialogContext.currentContext.isFirstGreeting === '1') {
+            dialogContext.respondWithEvent('AskReasonForContact');
+            return;
+        }
+
         dialogContext.setSessionParam('isFirstGreeting', '0');
 
         dialogContext.setFulfillmentText();
         console.log('action: '+dialogContext.currentAction+', lastFulfillmentText: '+dialogContext.params.lastFulfillmentText);
-        dialogContext.respondWithEvent('AskReasonForContact');
+        dialogContext.respondWithText();
         return;
     }
 }));
