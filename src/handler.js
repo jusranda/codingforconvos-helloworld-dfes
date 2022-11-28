@@ -23,14 +23,18 @@ const {DialogFlowEsClient,Intent,fmtLog} = require('codingforconvos');
 const convoClient = new DialogFlowEsClient({
     // Initialize global session parameters.
     baseParams: {
+        botName: '',
         companyName: '',
     },
     // Populate global session parameters from the environment and/or incoming webhook payload.
     populateFromEsPayload: (context, dialogContext) => {
         const payload = dialogContext.payload; // Access the Dialogflow ES webhook payload object.
     
-        const defaultName = process.env.COMPANY_NAME || 'Cisco';
-        context.parameters.companyName = payload.companyName || defaultName;
+        // Configure Bot Name.
+        context.parameters.botName = process.env.BOT_NAME || 'Kaitlin';
+        
+        // Configure Bot Company Name.
+        context.parameters.companyName = payload.companyName || process.env.COMPANY_NAME || 'Cisco';
         
         return context;
     }
@@ -42,22 +46,99 @@ const convoClient = new DialogFlowEsClient({
 // Register Sequences and Intent Handlers. //
 /////////////////////////////////////////////
 
+convoClient.registerSequence(new Sequence({
+    name: 'welcome', // Sequence name, also used for Dialogflow context name.
+    activity: 'understanding how I can help', // Activity description in gerund form, used in course correction.
+    identityRequired: false,
+    authRequired: false,
+    params: {
+        isFirstGreeting: '1',
+        requireSayIntroBrief: '1',
+        requireSayIntroLong: '1',
+        requireAskWellbeing: '1'
+    },
+    navigate: (dialogContext) => { // Navigate the sequence.
+        if (dialogContext.currentContext.isFirstGreeting === '1') {
+            dialogContext.currentContext.requireSayIntroBrief = '0';
+            dialogContext.currentContext.requireSayIntroLong = '1';
+        } else {
+            dialogContext.currentContext.requireSayIntroBrief = '1';
+            dialogContext.currentContext.requireSayIntroLong = '0';
+        }
+
+        if (dialogContext.currentContext.requireSayIntroBrief === '1') {
+            dialogContext.respondWithEvent('SayIntroBrief');
+            return;
+        }
+
+        if (dialogContext.currentContext.requireSayIntroLong === '1') {
+            dialogContext.respondWithEvent('SayIntroLong');
+            return;
+        }
+
+        if (dialogContext.currentContext.requireAskWellbeing === '1') {
+            dialogContext.respondWithEvent('AskWellbeing');
+            return;
+        }
+
+        dialogContext.setFulfillmentText();
+        console.log('action: '+dialogContext.currentAction+', lastFulfillmentText: '+dialogContext.params.lastFulfillmentText);
+        dialogContext.respondWithEvent('AskReasonForContact');
+        return;
+    }
+}));
+
 // Register intents
-convoClient.registerIntent(new Intent({
-    action: 'skill.some.example.intent',
-    waitForReply: true,
+convoClient.registerIntents(new Intent({
+    actions: [
+        'input.welcome',
+        'wellbeing.positive',
+        'wellbeing.negative'
+    ],
+    sequenceName: 'welcome',
     handler: (dialogContext) => {
-        dialogContext.appendFulfillmentText();
+        dialogContext.setFulfillmentText();
         return;
     }
 }));
 
 convoClient.registerIntent(new Intent({
-    action: 'skill.speaktoloanofficer',
-    waitForReply: false,
+    action:'welcome.ask.wellbeing',
+    sequenceName: 'welcome',
+    waitForReply: true,
     handler: (dialogContext) => {
-        dialogContext.setFulfillmentText();
-        dialogContext.respondWithEvent('OfferSpeakToAgent', dialogContext.params.lastFulfillmentText);
+        dialogContext.appendFulfillmentText();
+        dialogContext.setCurrentParam('requireAskWellbeing', '0');
+        return;
+    }
+}));
+
+convoClient.registerIntent(new Intent({
+    action: 'welcome.say.intro.brief',
+    sequenceName: 'welcome',
+    handler: (dialogContext) => {
+        dialogContext.appendFulfillmentText();
+        dialogContext.setFulfillmentText('requireSayIntroBrief', '0');
+        return;
+    }
+}));
+
+convoClient.registerIntent(new Intent({
+    action: 'welcome.say.intro.long',
+    sequenceName: 'welcome',
+    handler: (dialogContext) => {
+        dialogContext.appendFulfillmentText();
+        dialogContext.setFulfillmentText('requireSayIntroLong', '0');
+        return;
+    }
+}));
+
+convoClient.registerIntent(new Intent({
+    action: 'skill.reasonforcontact',
+    sequenceName: 'welcome',
+    waitForReply: true,
+    handler: (dialogContext) => {
+        dialogContext.appendFulfillmentText();
         return;
     }
 }));
