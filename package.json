@@ -1,0 +1,24 @@
+{
+  "name": "codingforconvos-helloworld-dfes",
+  "version": "0.0.1",
+  "description": "A simple \"hello world\" implementation of the codingforconvos NPM library for handling Dialogflow ES webhooks. This implementation uses Cloud Run and Cloud Build for deployment.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jusranda/codingforconvos-helloworld-dfes.git"
+  },
+  "author": "Justin Randall",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jusranda/codingforconvos-helloworld-dfes/issues"
+  },
+  "homepage": "https://github.com/jusranda/codingforconvos-helloworld-dfes#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "codingforconvos": "^0.0.126",
+    "express": "^4.18.2"
+  }
+}
