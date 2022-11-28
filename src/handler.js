@@ -53,33 +53,27 @@ convoClient.registerSequence(new Sequence({
     authRequired: false,
     params: {
         isFirstGreeting: '1',
-        requireSayIntroBrief: '1',
+        requireSayIntroBrief: '0',
         requireSayIntroLong: '1',
         requireAskWellbeing: '1'
     },
     navigate: (dialogContext) => { // Navigate the sequence.
-        if (dialogContext.currentContext.isFirstGreeting === '1') {
-            dialogContext.currentContext.requireSayIntroBrief = '0';
-            dialogContext.currentContext.requireSayIntroLong = '1';
-        } else {
-            dialogContext.currentContext.requireSayIntroBrief = '1';
-            dialogContext.currentContext.requireSayIntroLong = '0';
-        }
-
-        if (dialogContext.currentContext.requireSayIntroBrief === '1') {
+        if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireSayIntroBrief === '1') {
             dialogContext.respondWithEvent('SayIntroBrief');
             return;
         }
 
-        if (dialogContext.currentContext.requireSayIntroLong === '1') {
+        if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireSayIntroLong === '1') {
             dialogContext.respondWithEvent('SayIntroLong');
             return;
         }
 
-        if (dialogContext.currentContext.requireAskWellbeing === '1') {
+        if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireAskWellbeing === '1') {
             dialogContext.respondWithEvent('AskWellbeing');
             return;
         }
+
+        dialogContext.setSessionParam('isFirstGreeting', '0');
 
         dialogContext.setFulfillmentText();
         console.log('action: '+dialogContext.currentAction+', lastFulfillmentText: '+dialogContext.params.lastFulfillmentText);
