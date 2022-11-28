@@ -18,7 +18,7 @@
   "homepage": "https://github.com/jusranda/codingforconvos-helloworld-dfes#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
-    "codingforconvos": "^0.0.126",
+    "codingforconvos": "^0.0.127",
     "express": "^4.18.2"
   }
 }
