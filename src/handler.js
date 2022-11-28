@@ -83,9 +83,19 @@ convoClient.registerSequence(new Sequence({
 }));
 
 // Register intents
+convoClient.registerIntent(new Intent({
+    action: 'input.welcome',
+    sequenceName: 'welcome',
+    waitForReply: true,
+    handler: (dialogContext) => {
+        dialogContext.setFulfillmentText();
+        dialogContext.pushSequence('welcome');
+        return;
+    }
+}));
+
 convoClient.registerIntents({
     actions: [
-        'input.welcome',
         'wellbeing.positive',
         'wellbeing.negative'
     ],
