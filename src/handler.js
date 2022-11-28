@@ -89,7 +89,7 @@ convoClient.registerSequence(new Sequence({
 }));
 
 // Register intents
-convoClient.registerIntents(new Intent({
+convoClient.registerIntents({
     actions: [
         'input.welcome',
         'wellbeing.positive',
@@ -100,7 +100,7 @@ convoClient.registerIntents(new Intent({
         dialogContext.setFulfillmentText();
         return;
     }
-}));
+});
 
 convoClient.registerIntent(new Intent({
     action:'welcome.ask.wellbeing',
