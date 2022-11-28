@@ -86,7 +86,6 @@ convoClient.registerSequence(new Sequence({
 convoClient.registerIntent(new Intent({
     action: 'input.welcome',
     sequenceName: 'welcome',
-    waitForReply: true,
     handler: (dialogContext) => {
         dialogContext.setFulfillmentText();
         dialogContext.pushSequence('welcome');
