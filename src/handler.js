@@ -103,7 +103,7 @@ convoClient.registerIntents({
 });
 
 convoClient.registerIntent(new Intent({
-    action:'welcome.ask.wellbeing',
+    action: 'welcome.ask.wellbeing',
     sequenceName: 'welcome',
     waitForReply: true,
     handler: (dialogContext) => {
