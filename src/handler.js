@@ -14,7 +14,7 @@
  */
 'use strict';
 
-const {DialogFlowEsClient,Intent,fmtLog} = require('codingforconvos');
+const {DialogFlowEsClient,Intent,Sequence,fmtLog} = require('codingforconvos');
 
 ///////////////////////////////////////////
 // Create Dialogflow ES Endpoint Client. //
