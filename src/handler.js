@@ -27,7 +27,7 @@ const convoClient = new DialogFlowEsClient({
         companyName: '',
     },
     // Populate global session parameters from the environment and/or incoming webhook payload.
-    populateFromEsPayload: (context, dialogContext) => {
+    populateFromEsPayload: async (context, dialogContext) => {
         const payload = dialogContext.payload; // Access the Dialogflow ES webhook payload object.
     
         // Configure Bot Name.
