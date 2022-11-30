@@ -82,7 +82,7 @@ convoClient.registerSequence(new Sequence({
             return;
         }
 
-        dialogContext.setSessionParam('isFirstGreeting', '0');
+        dialogContext.setCurrentParam('isFirstGreeting', '0');
 
         dialogContext.setFulfillmentText();
         console.log('action: '+dialogContext.currentAction+', lastFulfillmentText: '+dialogContext.params.lastFulfillmentText);
