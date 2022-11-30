@@ -30,12 +30,15 @@ const convoClient = new DialogFlowEsClient({
     populateFromEsPayload: async (context, dialogContext) => {
         const payload = dialogContext.payload; // Access the Dialogflow ES webhook payload object.
     
+        console.log(`botName: ${process.env.BOT_NAME}`);
+        console.log(`companyName: ${process.env.COMPANY_NAME}`);
+
         // Configure Bot Name.
-        context.parameters.botName = (process.env.BOT_NAME) ? process.env.BOT_NAME : 'Kaitlin';
+        context.parameters.botName = (process.env.BOT_NAME) ? process.env.BOT_NAME : context.parameters.botName;
         
         // Configure Bot Company Name.
         context.parameters.companyName = (payload.companyName) ? payload.companyName : 
-            (process.env.COMPANY_NAME ? process.env.COMPANY_NAME : 'Cisco');
+            (process.env.COMPANY_NAME ? process.env.COMPANY_NAME : context.parameters.companyName);
         
         return context;
     }
