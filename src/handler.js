@@ -50,6 +50,46 @@ const convoClient = new DialogFlowEsClient({
 // Register Sequences and Intent Handlers. //
 /////////////////////////////////////////////
 
+/**
+ * Tests if this is the first greeting.
+ * 
+ * @param {Object} currentParams    The current context parameters.
+ * @return {boolean} true if this is the first greeting; otherwise, false. 
+ */
+function isFirstGreeting(currentParams) {
+    return (currentParams.isFirstGreeting === '1');
+}
+
+/**
+ * Tests if a brief introduction is necessary.
+ * 
+ * @param {Object} currentParams    The current context parameters.
+ * @return {boolean} true if a brief introduction is necessary; otherwise, false. 
+ */
+function shouldProvideBriefIntro(currentParams) {
+    return (isFirstGreeting(currentParams) && currentParams.requireSayIntroBrief === '1');
+}
+
+/**
+ * Tests if a full introduction is necessary.
+ * 
+ * @param {Object} currentParams    The current context parameters.
+ * @return {boolean} true if a full introduction is necessary; otherwise, false. 
+ */
+function shouldProvideFullIntro(currentParams) {
+    return (isFirstGreeting(currentParams) && currentParams.requireSayIntroFull === '1');
+}
+
+/**
+ * Tests if inquiring around wellbeing is necessary.
+ * 
+ * @param {Object} currentParams    The current context parameters.
+ * @return {boolean} true if inquiring around wellbeing is necessary; otherwise, false. 
+ */
+function shouldInquireWellbeing(currentParams) {
+    return (isFirstGreeting(currentParams) && currentParams.requireAskWellbeing === '1');
+}
+
 convoClient.registerSequence(new Sequence({
     name: 'welcome', // Sequence name, also used for Dialogflow context name.
     activity: 'understanding how I can help', // Activity description in gerund form, used in course correction.
@@ -58,39 +98,34 @@ convoClient.registerSequence(new Sequence({
     params: {
         isFirstGreeting: '1',
         requireSayIntroBrief: '0',
-        requireSayIntroLong: '1',
+        requireSayIntroFull: '1',
         requireAskWellbeing: '1',
     },
     navigate: (dialogContext) => { // Navigate the sequence.
         const currentParams = dialogContext.ctxparams;
-        console.log('Current Params: '+JSON.stringify(currentParams));
 
-        if (currentParams.isFirstGreeting === '1' && currentParams.requireSayIntroBrief === '1') {
+        if (shouldProvideBriefIntro(currentParams)) {
             dialogContext.respondWithEvent('SayIntroBrief');
             return;
         }
 
-        if (currentParams.isFirstGreeting === '1' && currentParams.requireSayIntroLong === '1') {
+        if (shouldProvideFullIntro(currentParams)) {
             dialogContext.respondWithEvent('SayIntroLong');
             return;
         }
 
-        if (currentParams.isFirstGreeting === '1' && currentParams.requireAskWellbeing === '1') {
+        if (shouldInquireWellbeing(currentParams)) {
             dialogContext.respondWithEvent('AskWellbeing');
             return;
         }
 
-        if (currentParams.isFirstGreeting === '1') {
+        if (isFirstGreeting(currentParams)) {
             dialogContext.respondWithEvent('AskReasonForContact');
             return;
         }
-
-        console.log('Fell-through welcome checks.');
-
         dialogContext.setCurrentParam('isFirstGreeting', '0');
 
         dialogContext.setFulfillmentText();
-        console.log('action: '+dialogContext.currentAction+', lastFulfillmentText: '+dialogContext.params.lastFulfillmentText);
         dialogContext.respondWithText();
         return;
     }
@@ -102,7 +137,6 @@ convoClient.registerIntent(new Intent({
     sequenceName: 'welcome',
     handler: (dialogContext) => {
         dialogContext.setFulfillmentText();
-        //dialogContext.pushSequence('welcome');
         return;
     }
 }));
@@ -145,7 +179,7 @@ convoClient.registerIntent(new Intent({
     sequenceName: 'welcome',
     handler: (dialogContext) => {
         dialogContext.appendFulfillmentText();
-        dialogContext.setCurrentParam('requireSayIntroLong', '0');
+        dialogContext.setCurrentParam('requireSayIntroFull', '0');
         return;
     }
 }));
