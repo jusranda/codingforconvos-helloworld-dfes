@@ -135,7 +135,7 @@ convoClient.registerIntent(new Intent({
     sequenceName: 'welcome',
     handler: (dialogContext) => {
         dialogContext.appendFulfillmentText();
-        dialogContext.setFulfillmentText('requireSayIntroBrief', '0');
+        dialogContext.setCurrentParam('requireSayIntroBrief', '0');
         return;
     }
 }));
@@ -145,7 +145,7 @@ convoClient.registerIntent(new Intent({
     sequenceName: 'welcome',
     handler: (dialogContext) => {
         dialogContext.appendFulfillmentText();
-        dialogContext.setFulfillmentText('requireSayIntroLong', '0');
+        dialogContext.setCurrentParam('requireSayIntroLong', '0');
         return;
     }
 }));
