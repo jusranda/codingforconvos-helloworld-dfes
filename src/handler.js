@@ -25,12 +25,6 @@ const convoClient = new DialogFlowEsClient({
     baseParams: {
         botName: '',
         companyName: '',
-
-        sessionId: '',
-        sessionInitialized: '0',
-        interactionId: '',
-        wxccChannel: '',
-        interactionSource: ''
     },
     // Populate global session parameters from the environment and/or incoming webhook payload.
     populateFromEsPayload: async (context, dialogContext) => {
