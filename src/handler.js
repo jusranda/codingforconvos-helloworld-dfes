@@ -62,6 +62,8 @@ convoClient.registerSequence(new Sequence({
         requireAskWellbeing: '1'
     },
     navigate: (dialogContext) => { // Navigate the sequence.
+        console.log('Current Params: '+JSON.stringify(dialogContext.currentContext));
+        
         if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireSayIntroBrief === '1') {
             dialogContext.respondWithEvent('SayIntroBrief');
             return;
