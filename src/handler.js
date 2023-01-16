@@ -102,7 +102,7 @@ convoClient.registerIntent(new Intent({
     sequenceName: 'welcome',
     handler: (dialogContext) => {
         dialogContext.setFulfillmentText();
-        dialogContext.pushSequence('welcome');
+        //dialogContext.pushSequence('welcome');
         return;
     }
 }));
