@@ -62,24 +62,24 @@ convoClient.registerSequence(new Sequence({
         requireAskWellbeing: '1'
     },
     navigate: (dialogContext) => { // Navigate the sequence.
-        console.log('Current Params: '+JSON.stringify(dialogContext.currentContext));
-        
-        if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireSayIntroBrief === '1') {
+        console.log('Current Params: '+JSON.stringify(dialogContext.ctxparams));
+
+        if (dialogContext.ctxparams.isFirstGreeting === '1' && dialogContext.ctxparams.requireSayIntroBrief === '1') {
             dialogContext.respondWithEvent('SayIntroBrief');
             return;
         }
 
-        if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireSayIntroLong === '1') {
+        if (dialogContext.ctxparams.isFirstGreeting === '1' && dialogContext.ctxparams.requireSayIntroLong === '1') {
             dialogContext.respondWithEvent('SayIntroLong');
             return;
         }
 
-        if (dialogContext.currentContext.isFirstGreeting === '1' && dialogContext.currentContext.requireAskWellbeing === '1') {
+        if (dialogContext.ctxparams.isFirstGreeting === '1' && dialogContext.ctxparams.requireAskWellbeing === '1') {
             dialogContext.respondWithEvent('AskWellbeing');
             return;
         }
 
-        if (dialogContext.currentContext.isFirstGreeting === '1') {
+        if (dialogContext.ctxparams.isFirstGreeting === '1') {
             dialogContext.respondWithEvent('AskReasonForContact');
             return;
         }
