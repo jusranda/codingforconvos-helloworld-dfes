@@ -59,30 +59,33 @@ convoClient.registerSequence(new Sequence({
         isFirstGreeting: '1',
         requireSayIntroBrief: '0',
         requireSayIntroLong: '1',
-        requireAskWellbeing: '1'
+        requireAskWellbeing: '1',
     },
     navigate: (dialogContext) => { // Navigate the sequence.
-        console.log('Current Params: '+JSON.stringify(dialogContext.ctxparams));
+        const currentParams = dialogContext.ctxparams;
+        console.log('Current Params: '+JSON.stringify(currentParams));
 
-        if (dialogContext.ctxparams.isFirstGreeting === '1' && dialogContext.ctxparams.requireSayIntroBrief === '1') {
+        if (currentParams.isFirstGreeting === '1' && currentParams.requireSayIntroBrief === '1') {
             dialogContext.respondWithEvent('SayIntroBrief');
             return;
         }
 
-        if (dialogContext.ctxparams.isFirstGreeting === '1' && dialogContext.ctxparams.requireSayIntroLong === '1') {
+        if (currentParams.isFirstGreeting === '1' && currentParams.requireSayIntroLong === '1') {
             dialogContext.respondWithEvent('SayIntroLong');
             return;
         }
 
-        if (dialogContext.ctxparams.isFirstGreeting === '1' && dialogContext.ctxparams.requireAskWellbeing === '1') {
+        if (currentParams.isFirstGreeting === '1' && currentParams.requireAskWellbeing === '1') {
             dialogContext.respondWithEvent('AskWellbeing');
             return;
         }
 
-        if (dialogContext.ctxparams.isFirstGreeting === '1') {
+        if (currentParams.isFirstGreeting === '1') {
             dialogContext.respondWithEvent('AskReasonForContact');
             return;
         }
+
+        console.log('Fell-through welcome checks.');
 
         dialogContext.setCurrentParam('isFirstGreeting', '0');
 
