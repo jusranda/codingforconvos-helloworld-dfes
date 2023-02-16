@@ -3,4 +3,4 @@ A simple "hello world" implementation of the codingforconvos NPM library for han
 
 To deploy this project, create a new Cloud Run service, and set it up to pull changes from GitHub, using the Dockerfile asset to control the build.
 
-NOTE: Unfortunately, I no longer work for Cisco Systems. and this repository will no longer be maintained - Justin Randall
+NOTE: Unfortunately, I no longer work for Cisco Systems, and this repository will no longer be maintained - Justin Randall
